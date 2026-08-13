@@ -1,28 +1,25 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class User
+    public class User : BaseEntity
     {
-        private Guid _id;
+        
         private string _firstName;
         private string _lastName;
         private string _email;
         private string _bio;
         private string _profilePictureUrl;
         private string _passwordHash;
-        private DateTime _createdAt;
         private bool _isActive;
 
         // Parameterless constructor
 
-        public User()
+        public User() : base(Guid.NewGuid())
         {
-            _id = Guid.NewGuid();
-            _createdAt = DateTime.UtcNow;
             _isActive = true;
         }
 
         // Constructor
-        public User(string firstName, string lastName, string username, string email, string passwordHash) : this()
+        public User(string firstName, string lastName, string email, string passwordHash) : this()
         {
             FirstName = firstName;
             LastName = lastName;
@@ -31,12 +28,6 @@
         }
 
         //Properties
-
-        public Guid Id
-        {
-            get { return _id; }
-        }
-
         public string FirstName
         {
             get { return _firstName; }
@@ -73,18 +64,13 @@
             set { _passwordHash = value; }
         }
 
-        public DateTime CreatedAt
-        {
-            get { return _createdAt; }
-        }
-
         public bool IsActive
         {
             get { return _isActive; }
             set { _isActive = value; }
         }
 
-        //Domain Methods for Profile Management (Story 1)
+        // Domain Methods for Profile Management (Story 1)
 
         public void UpdateProfile(string firstName, string lastName, string bio, string profilePictureUrl)
         {

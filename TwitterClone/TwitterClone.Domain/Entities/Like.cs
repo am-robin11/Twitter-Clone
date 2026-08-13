@@ -1,18 +1,16 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Like
+    public class Like : BaseEntity
     {
-        
         private Guid _userId;
         private Guid _tweetId;
-        private DateTime _likedAt;
 
         // Constructors
 
         // Parameterless constructor
-        public Like()
+        public Like() : base(Guid.NewGuid())
         {
-            
+
         }
 
         // Main constructor for creating a new like
@@ -20,7 +18,6 @@
         {
             _userId = userId;
             _tweetId = tweetId;
-            _likedAt = DateTime.UtcNow;
         }
 
         // Properties
@@ -28,6 +25,7 @@
         public Guid UserId
         {
             get { return _userId; }
+            set { _userId = value; }
         }
 
         public Guid TweetId
@@ -35,9 +33,12 @@
             get { return _tweetId; }
         }
 
-        public DateTime LikedAt
+        public DateTime LikedAt => CreatedAt;
+
+        public override string DescribeRecord()
         {
-            get { return _likedAt; }
+            var baseDescription = base.DescribeRecord();
+            return $"{baseDescription}, UserId: {UserId}, TweetId: {TweetId}, LikedAt {LikedAt}";
         }
     }
 }
