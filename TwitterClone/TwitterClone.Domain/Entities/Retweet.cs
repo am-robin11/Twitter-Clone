@@ -1,18 +1,19 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Retweet
+    public class Retweet : BaseEntity
     {
-        
+
         private Guid _userId;
         private Guid _tweetId;
-        private DateTime _retweetedAt;
+        // private string _quoteContent;
+
 
         // Constructors
 
         // Parameterless constructor
-        public Retweet()
+        public Retweet() : base(Guid.NewGuid())
         {
-            
+
         }
 
         // Main constructor for creating a new retweet
@@ -20,7 +21,6 @@
         {
             _userId = userId;
             _tweetId = tweetId;
-            _retweetedAt = DateTime.UtcNow;
         }
 
         // Properties
@@ -28,16 +28,35 @@
         public Guid UserId
         {
             get { return _userId; }
+            set { _userId = value; }
         }
 
         public Guid TweetId
         {
             get { return _tweetId; }
+            set { _tweetId = value; }
         }
 
-        public DateTime RetweetedAt
+        //public bool IsQuoteTweet => !string.IsNullOrWhiteSpace(_quoteContent);
+
+        // Domain method to update the quote content (e.g., if the user edits the quote)
+        //public void SetQuoteContent(string quoteContent)
+        //{
+        //    if (quoteContent != null && quoteContent.Length > 280)
+        //        throw new ArgumentException("Quote content cannot exceed 280 characters.");
+
+        //    _quoteContent = quoteContent?.Trim(); // null if empty/whitespace
+        //}
+
+        public DateTime RetweetedAt => CreatedAt;
+
+        public override string DescribeRecord()
         {
-            get { return _retweetedAt; }
+            var baseDescription = base.DescribeRecord();
+            // var quoteInfo = IsQuoteTweet ? $", Quote: \"{_quoteContent}\"" : " (simple retweet)";
+            return $"{baseDescription}, UserId: {UserId}, TweetId: {TweetId}, ReTweetedAt {RetweetedAt}";
         }
+
+
     }
 }

@@ -1,52 +1,42 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Tweet
+    public class Tweet : BaseEntity
     {
 
-        private Guid _id;
+
         private Guid _authorId;
         private string _content;
-        private DateTime _createdAt;
-        private DateTime? _updatedAt;
         private bool _isDeleted;
 
         // Parameterless constructor
-        public Tweet()
-        {
-            _id = Guid.NewGuid();
-            _createdAt = DateTime.UtcNow;
-            _isDeleted = false;
-        }
-
-        // Main constructor for creating a new tweet (Story 2 - "post")
-        public Tweet(Guid authorId, string content) : this()
+        public Tweet(Guid authorId, string content) : base(Guid.NewGuid())
         {
             _authorId = authorId;
-            AddContent(content);
+            SetContent(content);
+            _isDeleted = false;
         }
 
         //Properties
 
-        public Guid Id
-        {
-            get { return _id; }
-        }
-
         public Guid AuthorId
         {
             get { return _authorId; }
+            set { _authorId = value; }
         }
 
-        public string Content { get; private set; }
-
-        public DateTime CreatedAt
+        public string Content
         {
-            get { return _createdAt; }
+            get { return _content; }
+            private set { _content = value; }
         }
 
-        public DateTime? UpdatedAt
+        public void SetContent(string content)
         {
-            get { return _updatedAt; }
+            if (string.IsNullOrWhiteSpace(content))
+                throw new ArgumentException("Content cannot be empty or whitespace.");
+            if (content.Length > 280)
+                throw new ArgumentException("Content cannot exceed 280 characters.");
+            _content = content;
         }
 
         public bool IsDeleted
@@ -55,32 +45,13 @@
             private set { _isDeleted = value; }
         }
 
-        public void AddContent(string content)
+        public DateTime TweetedAt => CreatedAt;
+
+        public override string DescribeRecord()
         {
-            if (string.IsNullOrWhiteSpace(content))
-            {
-                throw new ArgumentException("Content cannot be empty or whitespace.");
-            }
-            if (content.Length > 280)
-            {
-                throw new ArgumentException("Content cannot exceed 280 characters.");
-            }
-            Content = content;
-            _updatedAt = DateTime.UtcNow;
+            var baseDescription = base.DescribeRecord();
+            return $"{baseDescription}, AuthorId: {AuthorId}, Content {Content}, TweetedAt {TweetedAt}";
         }
 
-        //New methods for Story 2 (delete & restore)
-
-        public void SoftDelete()
-        {
-            _isDeleted = true;
-            _updatedAt = DateTime.UtcNow;
-        }
-
-        public void Restore()
-        {
-            _isDeleted = false;
-            _updatedAt = DateTime.UtcNow;
-        }
     }
 }

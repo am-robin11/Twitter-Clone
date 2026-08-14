@@ -1,26 +1,24 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Follow
+    public class Follow : BaseEntity
     {
         
         private Guid _followerId;
-        private Guid _followeeId;
-        private DateTime _followedAt;
+        private Guid _followId;
 
         // Constructors
 
         // Parameterless constructor
-        public Follow()
+        public Follow() : base(Guid.NewGuid())
         {
             
         }
 
         // Main constructor for creating a new follow relationship
-        public Follow(Guid followerId, Guid followeeId) : this()
+        public Follow(Guid followerId, Guid followId) : this()
         {
             _followerId = followerId;
-            _followeeId = followeeId;
-            _followedAt = DateTime.UtcNow;
+            _followId = followId;
         }
 
         // Properties
@@ -30,14 +28,15 @@
             get { return _followerId; }
         }
 
-        public Guid FolloweeId
+        public Guid FollowId
         {
-            get { return _followeeId; }
+            get { return _followId; }
         }
 
-        public DateTime FollowedAt
+        public override string DescribeRecord()
         {
-            get { return _followedAt; }
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, FollowerId {FollowerId}, FollowId {FollowId}";
         }
     }
 }

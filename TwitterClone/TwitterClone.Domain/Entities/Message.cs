@@ -1,22 +1,19 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Message
+    public class Message : BaseEntity
     {
         
-        private Guid _id;
+        
         private Guid _senderId;
         private Guid _receiverId;
         private string _content;
-        private DateTime _sentAt;
         private bool _isRead;
 
         // Constructors
 
         // Parameterless constructor
-        public Message()
+        public Message() : base(Guid.NewGuid())
         {
-            _id = Guid.NewGuid();
-            _sentAt = DateTime.UtcNow;
             _isRead = false;
         }
 
@@ -30,11 +27,6 @@
 
         // Properties
 
-        public Guid Id
-        {
-            get { return _id; }
-        }
-
         public Guid SenderId
         {
             get { return _senderId; }
@@ -47,11 +39,6 @@
 
         // Auto-property with private setter
         public string Content { get; private set; }
-
-        public DateTime SentAt
-        {
-            get { return _sentAt; }
-        }
 
         public bool IsRead
         {
@@ -73,6 +60,12 @@
                 throw new ArgumentException("Content cannot exceed 10000 characters.");
             }
             Content = content;
+        }
+
+        public override string DescribeRecord()
+        {
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, SenderId {SenderId}, ReceiverId {ReceiverId}, Content {Content}";
         }
 
         // Marks the message as read (Story 8 - real-time messages)

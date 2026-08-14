@@ -1,44 +1,31 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Notification
+    public class Notification : BaseEntity
     {
         // Fields
 
-        private Guid _id;
+        
         private Guid _userId;
         private string _type;       
         private string _message;    
         private bool _isRead;
-        private DateTime _createdAt;
+        
 
         // Constructors
 
         // Parameterless constructor
-        public Notification()
+        public Notification(string notificationtype) : base(Guid.NewGuid())
         {
-            _id = Guid.NewGuid();
-            _createdAt = DateTime.UtcNow;
             _isRead = false;
-        }
-
-        // Main constructor for creating a new notification
-        public Notification(Guid userId, string type, string message) : this()
-        {
-            _userId = userId;
-            _type = type;
-            _message = message;
+            _type = notificationtype;
         }
 
         // Properties
 
-        public Guid Id
-        {
-            get { return _id; }
-        }
-
         public Guid UserId
         {
             get { return _userId; }
+            set { _userId = value; }
         }
 
         public string Type
@@ -47,7 +34,7 @@
             set { _type = value; }
         }
 
-        public string Message
+        protected string Message
         {
             get { return _message; }
             set { _message = value; }
@@ -59,11 +46,7 @@
             private set { _isRead = value; } // Private to enforce using MarkAsRead()
         }
 
-        public DateTime CreatedAt
-        {
-            get { return _createdAt; }
-        }
-
+   
         // Domain Methods
 
         // Marks the notification as read (Story 5 - real-time notifications)
