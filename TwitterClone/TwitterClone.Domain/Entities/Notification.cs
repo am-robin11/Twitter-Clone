@@ -1,6 +1,6 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class Notification : BaseEntity
+    public abstract class Notification : BaseEntity
     {
         // Fields
 
@@ -46,10 +46,22 @@
             private set { _isRead = value; } // Private to enforce using MarkAsRead()
         }
 
-   
+        public override string DescribeRecord()
+        {
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, UserId: {UserId}, Type: {Type}, Message: {Message}, IsRead: {IsRead}";
+        }
+
+        public string GetNotificationInfo()
+        {
+            return $"UserId: {_userId}, NotificationType: {_type}";
+        }
+
+        public abstract string GetMessage();
+
         // Domain Methods
 
-        // Marks the notification as read (Story 5 - real-time notifications)
+            // Marks the notification as read (Story 5 - real-time notifications)
         public void MarkAsRead()
         {
             _isRead = true;
