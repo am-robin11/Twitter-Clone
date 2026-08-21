@@ -1,6 +1,6 @@
 ﻿namespace TwitterClone.Domain.Entities
 {
-    public class User : BaseEntity
+    public class User : BaseEntity, IFollowable, INotifiable
     {
         
         private string _firstName;
@@ -70,6 +70,9 @@
             set { _isActive = value; }
         }
 
+        private List<Guid> _followers = new List<Guid>();
+        private List<Guid> _incomingNotifications = new List<Guid>();
+
         // Domain Methods for Profile Management (Story 1)
 
         public void UpdateProfile(string firstName, string lastName, string bio, string profilePictureUrl)
@@ -88,6 +91,31 @@
         public void ReactivateAccount()
         {
             _isActive = true;
+        }
+
+        public void Follow(Guid userId)
+        {
+            if (!_followers.Contains(userId))
+            {
+                _followers.Add(userId);
+            }
+        }
+
+        public void Unfollow(Guid userId)
+        {
+            if (_followers.Contains(userId))
+            {
+                _followers.Remove(userId);
+            }
+
+        }
+
+        public void AddNotification(Guid NotificationId)
+        {
+            if (!_incomingNotifications.Contains(NotificationId))
+            {
+                _incomingNotifications.Add(NotificationId);
+            }
         }
     }
 }
